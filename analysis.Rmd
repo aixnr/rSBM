@@ -1,0 +1,54 @@
+---
+title: "rSBM: Sequence-Based Mapping in R"
+author: "Aizan (A.K.E.)"
+date: "8/21/2020"
+output: html_document
+---
+
+It is highly recommended to be used with RStudio IDE. First, choose working directory with `setwd()` function, or by hitting `Shift` + `Ctrl` + `H` simultaneously, or by going to `Session` -> `Set Working Directory` -> `Choose Directory...`
+
+Ensure that all the libraries listed here are installed. In particular, `Biostrings` package requires the Bioconductor package repository present. The rest are available through CRAN.
+
+```{r message = FALSE}
+library(Biostrings)
+library(seqinr)
+library(stringdist)
+library(maptools)
+library(FactoMineR)
+```
+
+Source the main script, `rSBM.R`, which contains our core SBM functions.
+
+```{r}
+source("rSBM.R")
+```
+
+Perform QC on the FASTA file, see `example/seq_H1N1.fasta` file (here we use H1N1 as the example). The keyword argument `AA_size` defines the target size of the amino acid sequence, here it is either 565 or 566 corresponding to the full-length H1N1 hemagglutinin.
+
+```{r}
+QCseq <- HemagglutininQC(fasta = 'example/seq_H1N1.fasta', AA_size = "565|566")
+```
+
+Save the QC'ed file for alignment with MUSCLE or Clustal Omega or your MSA program of choice.
+
+```{r}
+seqinr::write.fasta(QCseq, names(QCseq), "example/seq_H1N1-qc.fasta", open = "w", nbchar = 60)
+```
+
+Assuming you have installed `MUSCLE` on your computer and the binary is available in `$PATH`, run the following command in your terminal/shell.
+
+```
+muscle -in "example/seq_H1N1-qc.fasta" -out "example/seq_H1N1-qc-aligned.fasta"
+```
+
+Read the aligned `.fasta` file, make matrix, and spit out Hamming distance
+
+```{r}
+my_matrix <- matrix_generator("example/seq_H1N1-qc-aligned.fasta")
+```
+
+Plot!
+
+```{r}
+plot_distance(my_matrix)
+```
