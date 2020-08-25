@@ -33,8 +33,8 @@ The RMarkdown `analysis.Rmd` has inline tutorial for you to follow. User is expe
 
 ## To-Do/Planned Features
 
-- A function to return PC1 and PC2 values, then wrap to call with `ggplot2` a much more pleasing plotting experience.
-- A simple switch to enable user to input range of amino acid for epitope-specific distance calculation.
+- A separate function to return PC1 and PC2 values, then wrap to call with `ggplot2` for a much more pleasing plotting experience.
+- A simple switch to enable user to input range of amino acid for epitope-specific distance calculation (user-defined).
 
 ## License
 
